@@ -17,7 +17,7 @@ pipeline {
           }
           steps {
             echo 'Building docker image'
-            sh "docker build --tag snirkop/train-schedule ."
+            sh "docker build --tag snirkop/train-schedule:${BUILD_NUMBER} ."
           }
         }
         stage('Push Docker image') {
