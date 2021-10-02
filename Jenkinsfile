@@ -2,6 +2,9 @@ pipeline {
     agent any
     stages {
         stage('Build') {
+            when {
+                branch 'master'
+            }
             steps {
                 echo 'Running build automation'
                 sh './gradlew build --no-daemon'
@@ -18,9 +21,14 @@ pipeline {
           }
         }
         stage('Push Docker image') {
+            when {
+                branch 'master'
+            }
           withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'DOCKERUSER', passwordVariable: 'DOCKERPASS')]) {
-            sh "docker login -u $DOCKERUSER -p $DOCKERPASS"
-            sh "docker push snirkop/train-schedule:${BUILD_NUMBER}"
+              steps {
+                  sh "docker login -u $DOCKERUSER -p $DOCKERPASS"
+                  sh "docker push snirkop/train-schedule:${BUILD_NUMBER}"
+              }
           }
         }
         stage ('DeployToProduction') {
