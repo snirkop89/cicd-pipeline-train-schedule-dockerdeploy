@@ -24,8 +24,8 @@ pipeline {
             when {
                 branch 'master'
             }
-          withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'DOCKERUSER', passwordVariable: 'DOCKERPASS')]) {
-              steps {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'DOCKERUSER', passwordVariable: 'DOCKERPASS')]) {
                   sh "docker login -u $DOCKERUSER -p $DOCKERPASS"
                   sh "docker push snirkop/train-schedule:${BUILD_NUMBER}"
               }
